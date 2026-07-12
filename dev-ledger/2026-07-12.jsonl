@@ -1,0 +1,1 @@
+{"data":{"files":"tests/","session":"2026-07-12"},"detail":"Mechanical migration to mythings.testing: inline ScriptedEngine replaced by the shared one (drop-in).","kind":"build","outcome":"success","tool":"claude-code","ts":"2026-07-12T10:22:05Z"}

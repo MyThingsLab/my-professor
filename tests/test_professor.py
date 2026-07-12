@@ -3,8 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 
 from mythings.corpus import chunk, ingest
-from mythings.engine import EngineRequest, EngineResult, NoopEngine
+from mythings.engine import NoopEngine
 from mythings.mastery import load, record, rollup
+from mythings.testing import ScriptedEngine
 
 from myprofessor.professor import (
     grade,
@@ -22,16 +23,6 @@ _TEXT = (
     "Principal component analysis projects data onto the directions of greatest "
     "variance, the leading eigenvectors of the covariance matrix."
 )
-
-
-class ScriptedEngine:
-    def __init__(self, reply: str) -> None:
-        self.reply = reply
-        self.calls: list[EngineRequest] = []
-
-    def run(self, request: EngineRequest) -> EngineResult:
-        self.calls.append(request)
-        return EngineResult(text=self.reply, data={})
 
 
 def _corpus() -> tuple[list, list]:
