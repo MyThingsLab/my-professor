@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from mythings.engine import ClaudeCLIEngine, Engine, NoopEngine
+from mythings.engine import build_engine_from_args
 from mythings.mastery import Mastery, load, record, rollup
 from mythings.mastery import due as mastery_due
 
@@ -19,10 +19,6 @@ from myprofessor.professor import (
 
 BACKLOG_LABEL = "my-professor"
 DEFAULT_LEDGER = Path(".mythings/mastery.jsonl")
-
-
-def _engine(name: str) -> Engine:
-    return NoopEngine() if name == "noop" else ClaudeCLIEngine()
 
 
 def _render_lesson(lesson: Lesson) -> str:
@@ -118,12 +114,14 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     if args.cmd == "quiz":
-        lesson = quiz(args.topic, documents, chunks, _engine(args.engine),
+        lesson = quiz(args.topic, documents, chunks, build_engine_from_args(args),
                       questions=args.questions, top=args.top)
         print(_render_lesson(lesson))
         return 0
 
-    result = grade(args.topic, args.answer, documents, chunks, _engine(args.engine), top=args.top)
+    result = grade(
+        args.topic, args.answer, documents, chunks, build_engine_from_args(args), top=args.top
+    )
     print(_render_grade(result))
     if not args.no_record:
         record(args.ledger, to_attempt(result))
